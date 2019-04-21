@@ -1,6 +1,18 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 
+<div class="container">
+  <form action="/scrape" method="GET">
+    <div class="form-group">
+      <label for="scrapeUrlInput">URL to scrape</label>
+      <input type="text" name="url" class="form-control" id="scrapeUrlInput" aria-describedby="urlHelp"
+        placeholder="Enter email">
+      <small id="urlHelp" class="form-text text-muted">Enter the URL of a website you would like to scrape for news articles.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
 <div id="articleCarousel" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     {{#each articles}}
