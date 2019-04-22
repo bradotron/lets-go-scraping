@@ -9,7 +9,6 @@ var articleSchema = new Schema({
 
   summary: {
     type: String,
-    required: false
   },
 
   url: {
