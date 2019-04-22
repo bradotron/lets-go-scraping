@@ -4,7 +4,8 @@ var Schema = mongoose.Schema;
 var articleSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
 
   summary: {
@@ -13,7 +14,7 @@ var articleSchema = new Schema({
 
   url: {
     type: String,
-    required: true
+    required: true,
   },
 
   comments: [{ 

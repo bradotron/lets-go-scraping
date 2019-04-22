@@ -46,7 +46,7 @@ router.get("/articles", function(req, res) {
 router.get(`/articles/scrape`, function(req, res ) {
   // pass the url to scrap in req.body.url
   // do an axios to a website
-  let url = req.body.url || "http://www.echojs.com/";
+  let url = "https://www.dailywire.com/";
   axios.get(url).then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
@@ -67,7 +67,21 @@ router.get(`/articles/scrape`, function(req, res ) {
 
       articles.push(result);
     });
+    
+    $("article h3").each(function(i, element) {
+      // Save an empty result object
+      var result = {};
 
+      // Add the text and href of every link, and save them as properties of the result object
+      result.title = $(this)
+        .children("a")
+        .text();
+      result.url = $(this)
+        .children("a")
+        .attr("href");
+
+      articles.push(result);
+    });
 
     articles.forEach((article) => db.Article.create(article));
 

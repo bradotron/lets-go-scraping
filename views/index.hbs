@@ -2,15 +2,7 @@
 <p>Welcome to {{title}}</p>
 
 <div class="container">
-  <form action="/scrape" method="GET">
-    <div class="form-group">
-      <label for="scrapeUrlInput">URL to scrape</label>
-      <input type="text" name="url" class="form-control" id="scrapeUrlInput" aria-describedby="urlHelp"
-        placeholder="Enter email">
-      <small id="urlHelp" class="form-text text-muted">Enter the URL of a website you would like to scrape for news articles.</small>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  <button class="btn btn-primary btn-scrape">Scrape Me!</button>
 </div>
 
 {{#if articles}}
@@ -30,8 +22,13 @@
     <div class="carousel-item active">
       <div class="card w-75 mx-auto my-5">
         <div class="card-body">
-          <h5 class="card-title">{{this.title}}</h4>
-            <a href="{{this.link}}" class="btn btn-primary" target="_blank">Full Article</a>
+          <h4 class="card-title">{{this.title}}</h4>
+          <hr>
+          <a href="{{this.link}}" class="btn btn-primary" target="_blank">Full Article</a>
+          <hr>
+          {{!-- iterate through the comments --}}
+          {{#each this.comments}}
+          {{/each}}
         </div>
       </div>
     </div>
@@ -39,8 +36,8 @@
     <div class="carousel-item">
       <div class="card w-75 mx-auto my-5">
         <div class="card-body">
-          <h5 class="card-title">{{this.title}}</h4>
-            <a href="{{this.link}}" class="btn btn-primary" target="_blank">Full Article</a>
+          <h4 class="card-title">{{this.title}}</h4>
+          <a href="{{this.link}}" class="btn btn-primary" target="_blank">Full Article</a>
         </div>
       </div>
     </div>
@@ -58,4 +55,9 @@
 </div>
 {{else}}
 {{!-- No articles were passed --}}
+<h1>No articles in database, scrape new articles.</h1>
 {{/if}}
+
+<script>
+
+</script>
