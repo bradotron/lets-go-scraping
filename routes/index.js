@@ -48,6 +48,7 @@ router.post("/comments/comment", function(req, res) {
   // console.log(req.body);
   // { articleId: '5cbe52220c90d12f5c66b018', comment: "i'm a dumb" }
   db.Comment.create({
+    author: req.body.author,
     comment: req.body.comment
   })
     .then(dbComment => {

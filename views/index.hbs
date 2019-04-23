@@ -18,11 +18,11 @@
       </a>
     </p>
     <div class="collapse" id="commentsCollapse">
-      <ul>
+      <ul class="list-group">
         {{#if this.comments}}
         {{#each this.comments}}
-        <li>
-          <p><strong>{{this.author}}:</strong> {{this.comment}}</p>
+        <li class="list-group-item">
+          <p class="my-0"><strong>{{this.author}}:</strong> {{this.comment}}</p>
         </li>
         {{/each}}
         {{else}}
@@ -30,7 +30,10 @@
         {{/if}}
       </ul>
       {{!-- create a text input field and a submit comment button --}}
+      <hr>
+      <p>Add a comment:</p>
       <form>
+        <input type="text" name="author" placeholder="Username" class="w-100 my-1 author-input"><br>
         <input type="text" name="comment" placeholder="Write a comment..." class="w-100 my-1 comment-input"><br>
         <button class="btn btn-primary btn-sm btn-comment" data-articleId="{{this._id}}">Add Comment</button>
       </form>
