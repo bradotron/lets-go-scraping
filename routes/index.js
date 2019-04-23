@@ -9,14 +9,16 @@ var mongoose = require("mongoose");
 var db = require("../models");
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/scrapingArticles", { useNewUrlParser: true });
-
+mongoose.connect("mongodb://localhost/scrapingArticles", {
+  useNewUrlParser: true
+});
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
   // get all articles currently in the database
   // Grab every document in the Articles collection
   db.Article.find({})
+    .populate("comments")
     .then(function(dbArticle) {
       //send the scraped articles to the client
       res.render("index", { title: "Scraped Articles", articles: dbArticle });
@@ -25,7 +27,6 @@ router.get("/", function(req, res, next) {
       // If an error occurred, send it to the client
       res.json(err);
     });
-    
 });
 
 // Route for getting all Articles from the db
@@ -42,11 +43,34 @@ router.get("/articles", function(req, res) {
     });
 });
 
+// these route adds a comment to an article
+router.post("/comments/comment", function(req, res) {
+  // console.log(req.body);
+  // { articleId: '5cbe52220c90d12f5c66b018', comment: "i'm a dumb" }
+  db.Comment.create({
+    comment: req.body.comment
+  })
+    .then(dbComment => {
+      return db.Article.findOneAndUpdate(
+        { _id: req.body.articleId },
+        { $push: { comments: dbComment._id } },
+        { new: true }
+      );
+    })
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+  //Users.findOneAndUpdate({name: req.user.name}, {$push: {friends: friend}});
+});
+
 // this is the route to scrape new articles
-router.get(`/articles/scrape`, function(req, res ) {
+router.get(`/articles/scrape`, function(req, res) {
   // pass the url to scrap in req.body.url
   // do an axios to a website
-  let url = "https://www.dailywire.com/";
+  let url = "https://www.dailywire.com";
   axios.get(url).then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
@@ -61,13 +85,15 @@ router.get(`/articles/scrape`, function(req, res ) {
       result.title = $(this)
         .children("a")
         .text();
-      result.url = $(this)
-        .children("a")
-        .attr("href");
+      result.url =
+        url +
+        $(this)
+          .children("a")
+          .attr("href");
 
       articles.push(result);
     });
-    
+
     $("article h3").each(function(i, element) {
       // Save an empty result object
       var result = {};
@@ -76,22 +102,23 @@ router.get(`/articles/scrape`, function(req, res ) {
       result.title = $(this)
         .children("a")
         .text();
-      result.url = $(this)
-        .children("a")
-        .attr("href");
+      result.url =
+        url +
+        $(this)
+          .children("a")
+          .attr("href");
 
       articles.push(result);
     });
 
-    articles.forEach((article) => db.Article.create(article));
+    articles.forEach(article => db.Article.create(article));
 
     res.send(200);
   });
 });
 
-
 router.get("/signin", function(req, res, next) {
-  res.render("signin", {title: "Sign In"});
+  res.render("signin", { title: "Sign In" });
 });
 
 router.post("/signin", function(req, res) {

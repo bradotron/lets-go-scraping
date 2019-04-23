@@ -1,63 +1,52 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
-
-<div class="container">
-  <button class="btn btn-primary btn-scrape">Scrape Me!</button>
-</div>
+<hr class="my-1">
 
 {{#if articles}}
-<div id="articleCarousel" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    {{#each articles}}
-    {{#if @first}}
-    <li data-target="#articleCarousel" data-slide-to="{{@index}}" class="active"></li>
-    {{else}}
-    <li data-target="#articleCarousel" data-slide-to="{{@index}}"></li>
-    {{/if}}
-    {{/each}}
-  </ol>
-  <div class="carousel-inner">
-    {{#each articles}}
-    {{#if @first}}
-    <div class="carousel-item active">
-      <div class="card w-75 mx-auto my-5">
-        <div class="card-body">
-          <h4 class="card-title">{{this.title}}</h4>
-          <hr>
-          <a href="{{this.link}}" class="btn btn-primary" target="_blank">Full Article</a>
-          <hr>
-          {{!-- iterate through the comments --}}
-          {{#each this.comments}}
-          {{/each}}
-        </div>
-      </div>
+{{#each articles}}
+
+<div class="card w-75 mx-auto my-5">
+  <div class="card-body">
+    <h4 class="card-title"><a href="{{this.url}}" data-id="{{this._id}}" class="text-reset text-decoration-none"
+        target="_blank">{{this.title}}</a></h4>
+    <hr>
+    {{!-- iterate through the comments --}}
+    <p>
+      <a data-toggle="collapse" href="#commentsCollapse" role="button" aria-expanded="false"
+        aria-controls="collapseExample">
+        Toggle Comments
+      </a>
+    </p>
+    <div class="collapse" id="commentsCollapse">
+      <ul>
+        {{#if this.comments}}
+        {{#each this.comments}}
+        <li>
+          <p><strong>{{this.author}}:</strong> {{this.comment}}</p>
+        </li>
+        {{/each}}
+        {{else}}
+        <p>No comments on this article.</p>
+        {{/if}}
+      </ul>
+      {{!-- create a text input field and a submit comment button --}}
+      <form>
+        <input type="text" name="comment" placeholder="Write a comment..." class="w-100 my-1 comment-input"><br>
+        <button class="btn btn-primary btn-sm btn-comment" data-articleId="{{this._id}}">Add Comment</button>
+      </form>
     </div>
-    {{else}}
-    <div class="carousel-item">
-      <div class="card w-75 mx-auto my-5">
-        <div class="card-body">
-          <h4 class="card-title">{{this.title}}</h4>
-          <a href="{{this.link}}" class="btn btn-primary" target="_blank">Full Article</a>
-        </div>
-      </div>
-    </div>
-    {{/if}}
-    {{/each}}
+
   </div>
-  <a class="carousel-control-prev" href="#articleCarousel" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#articleCarousel" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
 </div>
+
+{{/each}}
 {{else}}
 {{!-- No articles were passed --}}
-<h1>No articles in database, scrape new articles.</h1>
+<p>There are currently no articles in the database, press the "Scrape Me!" button to load new articles.</p>
 {{/if}}
 
-<script>
-
-</script>
+<hr class="my-1">
+<div class="container">
+  <p>Pull any new articles from https://www.dailywire.com</p>
+  <button class="btn btn-primary btn-sm btn-scrape">Scrape Me!</button>
+</div>
