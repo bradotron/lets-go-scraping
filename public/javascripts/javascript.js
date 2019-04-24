@@ -12,10 +12,15 @@ $(`.btn-scrape`).click(function(event) {
   });
 });
 
+$(`.btn-delete-article`).click(function(event) {
+  let url = `/articles/article/${$(this).data("article-id")}`;
+  console.log(url);
+});
+
 $(`.btn-comment`).click(function(event) {
   let url = `/comments/comment`
   let data = {
-    articleId: $(this).data(`articleid`),
+    articleId: $(this).data(`article-id`),
     author: $(`.author-input`).val(),
     comment: $(`.comment-input`).val(),
   }
