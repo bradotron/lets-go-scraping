@@ -9,8 +9,15 @@ var mongoose = require("mongoose");
 var db = require("../models");
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/scrapingArticles", {
-  useNewUrlParser: true
+var MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost/scrapingArticles";
+
+mongoose.connect(MONGODB_URI, function(err, res) {
+  if (err) {
+    console.log("ERROR connecting to: " + uristring + ". " + err);
+  } else {
+    console.log("Succeeded connected to: " + uristring);
+  }
 });
 
 /* GET home page. */
@@ -119,11 +126,13 @@ router.get(`/articles/scrape`, function(req, res) {
 
 router.delete("/articles/article/:id", function(req, res, next) {
   console.log(req.params.id);
-  db.Article.findByIdAndDelete(req.params.id).then(function(dbArticle) {
-    res.sendStatus(200);
-  }).catch(function(error) {
-    res.sendStatus(500);
-  });
+  db.Article.findByIdAndDelete(req.params.id)
+    .then(function(dbArticle) {
+      res.sendStatus(200);
+    })
+    .catch(function(error) {
+      res.sendStatus(500);
+    });
 });
 
 router.get("/signin", function(req, res, next) {
