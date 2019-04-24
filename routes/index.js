@@ -12,11 +12,11 @@ var db = require("../models");
 var MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost/scrapingArticles";
 
-mongoose.connect(MONGODB_URI, function(err, res) {
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, function(err, res) {
   if (err) {
-    console.log("ERROR connecting to: " + uristring + ". " + err);
+    console.log("ERROR connecting to: " + MONGODB_URI + ". " + err);
   } else {
-    console.log("Succeeded connected to: " + uristring);
+    console.log("Succeeded connected to: " + MONGODB_URI);
   }
 });
 
