@@ -64,7 +64,6 @@ router.post("/comments/comment", function(req, res) {
     .catch(err => {
       res.json(err);
     });
-  //Users.findOneAndUpdate({name: req.user.name}, {$push: {friends: friend}});
 });
 
 // this is the route to scrape new articles
@@ -114,7 +113,16 @@ router.get(`/articles/scrape`, function(req, res) {
 
     articles.forEach(article => db.Article.create(article));
 
-    res.send(200);
+    res.sendStatus(200);
+  });
+});
+
+router.delete("/articles/article/:id", function(req, res, next) {
+  console.log(req.params.id);
+  db.Article.findByIdAndDelete(req.params.id).then(function(dbArticle) {
+    res.sendStatus(200);
+  }).catch(function(error) {
+    res.sendStatus(500);
   });
 });
 
